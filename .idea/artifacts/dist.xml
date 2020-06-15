@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact name="dist">
+    <output-path>$PROJECT_DIR$/dist</output-path>
+    <root id="root">
+      <element id="archive" name="simple-hl7v2.jar">
+        <element id="module-output" name="simple-hl7v2" />
+      </element>
+      <element id="directory" name="lib">
+        <element id="dir-copy" path="$PROJECT_DIR$/lib" />
+      </element>
+    </root>
+  </artifact>
+</component>
