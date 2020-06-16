@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="simple-hl7v2" default="all">
+  
+  
+  <property file="build.properties"/>
+  <!-- Uncomment the following property if no tests compilation is needed -->
+  <!-- 
+  <property name="skip.tests" value="true"/>
+   -->
+  
+  <!-- Compiler options -->
+  
+  <property name="compiler.debug" value="on"/>
+  <property name="compiler.generate.no.warnings" value="off"/>
+  <property name="compiler.args" value=""/>
+  <property name="compiler.max.memory" value="256m"/>
+  <patternset id="ignored.files">
+    <exclude name="**/CVS/**"/>
+    <exclude name="**/SCCS/**"/>
+    <exclude name="**/RCS/**"/>
+    <exclude name="**/rcs/**"/>
+    <exclude name="**/.DS_Store/**"/>
+    <exclude name="**/.svn/**"/>
+    <exclude name="**/.pyc/**"/>
+    <exclude name="**/.pyo/**"/>
+    <exclude name="**/*.pyc/**"/>
+    <exclude name="**/*.pyo/**"/>
+    <exclude name="**/.git/**"/>
+    <exclude name="**/*.hprof/**"/>
+    <exclude name="**/_svn/**"/>
+    <exclude name="**/.hg/**"/>
+    <exclude name="**/*.lib/**"/>
+    <exclude name="**/*~/**"/>
+    <exclude name="**/__pycache__/**"/>
+    <exclude name="**/.bundle/**"/>
+    <exclude name="**/*.rbc/**"/>
+  </patternset>
+  <patternset id="library.patterns">
+    <include name="*.zip"/>
+    <include name="*.apk"/>
+    <include name="*.war"/>
+    <include name="*.egg"/>
+    <include name="*.ear"/>
+    <include name="*.ane"/>
+    <include name="*.swc"/>
+    <include name="*.jar"/>
+  </patternset>
+  <patternset id="compiler.resources">
+    <exclude name="**/?*.java"/>
+    <exclude name="**/?*.form"/>
+    <exclude name="**/?*.class"/>
+    <exclude name="**/?*.groovy"/>
+    <exclude name="**/?*.scala"/>
+    <exclude name="**/?*.flex"/>
+    <exclude name="**/?*.kt"/>
+    <exclude name="**/?*.clj"/>
+  </patternset>
+  
+  
+  <!-- Project Libraries -->
+  
+  <path id="library.commons-lang3.classpath">
+    <pathelement location="${basedir}/lib/commons-lang3-3.4.jar"/>
+  </path>
+  
+  <!-- Modules -->
+  
+  
+  <!-- Module simple-hl7v2 -->
+  
+  <dirname property="module.simple-hl7v2.basedir" file="${ant.file}"/>
+  
+  
+  
+  <property name="compiler.args.simple-hl7v2" value="-encoding UTF-8 -source 1.7 ${compiler.args}"/>
+  
+  <property name="simple-hl7v2.output.dir" value="${module.simple-hl7v2.basedir}/build/production/simple-hl7v2"/>
+  <property name="simple-hl7v2.testoutput.dir" value="${module.simple-hl7v2.basedir}/build/test/simple-hl7v2"/>
+  
+  <path id="simple-hl7v2.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="simple-hl7v2.module.production.classpath">
+    <path refid="library.commons-lang3.classpath"/>
+  </path>
+  
+  <path id="simple-hl7v2.runtime.production.module.classpath">
+    <pathelement location="${simple-hl7v2.output.dir}"/>
+    <path refid="library.commons-lang3.classpath"/>
+  </path>
+  
+  <path id="simple-hl7v2.module.classpath">
+    <pathelement location="${simple-hl7v2.output.dir}"/>
+    <path refid="library.commons-lang3.classpath"/>
+  </path>
+  
+  <path id="simple-hl7v2.runtime.module.classpath">
+    <pathelement location="${simple-hl7v2.testoutput.dir}"/>
+    <pathelement location="${simple-hl7v2.output.dir}"/>
+    <path refid="library.commons-lang3.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.simple-hl7v2">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.simple-hl7v2">
+    <patternset refid="excluded.from.module.simple-hl7v2"/>
+  </patternset>
+  
+  <path id="simple-hl7v2.module.sourcepath">
+    <dirset dir="${module.simple-hl7v2.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.simple-hl7v2" depends="compile.module.simple-hl7v2.production,compile.module.simple-hl7v2.tests" description="Compile module simple-hl7v2"/>
+  
+  <target name="compile.module.simple-hl7v2.production" description="Compile module simple-hl7v2; production classes">
+    <mkdir dir="${simple-hl7v2.output.dir}"/>
+    <javac destdir="${simple-hl7v2.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true">
+      <compilerarg line="${compiler.args.simple-hl7v2}"/>
+      <bootclasspath refid="simple-hl7v2.module.bootclasspath"/>
+      <classpath refid="simple-hl7v2.module.production.classpath"/>
+      <src refid="simple-hl7v2.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.simple-hl7v2"/>
+    </javac>
+    
+    <copy todir="${simple-hl7v2.output.dir}">
+      <fileset dir="${module.simple-hl7v2.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.simple-hl7v2.tests" depends="compile.module.simple-hl7v2.production" description="compile module simple-hl7v2; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.simple-hl7v2" description="cleanup module">
+    <delete dir="${simple-hl7v2.output.dir}"/>
+    <delete dir="${simple-hl7v2.testoutput.dir}"/>
+  </target>
+  
+  <target name="init" description="Build initialization">
+    <!-- Perform any build initialization in this target -->
+  </target>
+  
+  <target name="clean" depends="clean.module.simple-hl7v2, clean.artifact.dist" description="cleanup all"/>
+  
+  <target name="build.modules" depends="init, clean, compile.module.simple-hl7v2" description="build all modules"/>
+  
+  <target name="init.artifacts">
+    <property name="artifacts.temp.dir" value="${basedir}/__artifacts_temp"/>
+    <property name="artifact.output.dist" value="${basedir}/dist"/>
+    <mkdir dir="${artifacts.temp.dir}"/>
+    <property name="temp.jar.path.simple-hl7v2.jar" value="${artifacts.temp.dir}/simple-hl7v2.jar"/>
+  </target>
+  
+  <target name="clean.artifact.dist" description="clean dist artifact output">
+    <delete dir="${artifact.output.dist}"/>
+  </target>
+  
+  <target name="artifact.dist" depends="init.artifacts, compile.module.simple-hl7v2" description="Build &#39;dist&#39; artifact">
+    <mkdir dir="${artifact.output.dist}"/>
+    <jar destfile="${temp.jar.path.simple-hl7v2.jar}" duplicate="preserve" filesetmanifest="mergewithoutmain">
+      <zipfileset dir="${simple-hl7v2.output.dir}"/>
+    </jar>
+    <copy file="${temp.jar.path.simple-hl7v2.jar}" tofile="${artifact.output.dist}/simple-hl7v2.jar"/>
+    <mkdir dir="${artifact.output.dist}/lib"/>
+    <copy todir="${artifact.output.dist}/lib">
+      <fileset dir="${basedir}/lib"/>
+    </copy>
+  </target>
+  
+  <target name="build.all.artifacts" depends="artifact.dist" description="Build all artifacts">
+    
+    <!-- Delete temporary files -->
+    <delete dir="${artifacts.temp.dir}"/>
+  </target>
+  
+  <target name="all" depends="build.modules, build.all.artifacts" description="build all"/>
+</project>
