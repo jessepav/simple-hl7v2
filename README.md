@@ -14,7 +14,7 @@ will happily allow you to add fifteen components to the `QRD.4` field if you tel
 to.
 
 But *Simple-HL7v2* is a 18K .jar with a dependency only on Commons-Lang3, and if you
-have a clear idea of the type of messages you'll be receiving and sending, it may be
-all you need.
+have a clear idea of the type of messages you'll be receiving and sending, and handle
+your own file or network transport, it may be all you need.
 
 
