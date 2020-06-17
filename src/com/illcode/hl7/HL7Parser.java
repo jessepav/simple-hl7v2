@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -88,6 +89,11 @@ public final class HL7Parser
 
     public Message parse(Reader r) {
         return parse(slurpReaderText(r, 2048).trim());
+    }
+
+    public Message parse(Path p) throws IOException {
+        final Reader r = new InputStreamReader(Files.newInputStream(p), StandardCharsets.UTF_8));
+        return parse(r);
     }
 
     private List<FieldValue> parseFieldText(String text) {
