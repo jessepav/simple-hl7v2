@@ -18,8 +18,6 @@ import static com.illcode.hl7.Segment.FieldValue;
 
 /**
  * Parses HL7v2 text into an instance of {@link Message}.
- * <p/>
- * In general this class is <strong>not</strong> thread-safe.
  */
 public final class HL7Parser
 {
@@ -53,14 +51,21 @@ public final class HL7Parser
         this.params = new HL7Params(hl7msg);
     }
 
+    /** Return the parameters being used by this HL7Parser */
     public HL7Params getParams() {
         return params;
     }
 
+    /** Set the parameters to be used by this HL7Parser */
     public void setParams(HL7Params params) {
         this.params = params;
     }
 
+    /**
+     * Parse text as a <em>single</em> HL7 message.
+     * @param hl7msg HL7v2 text to parse
+     * @return new Message instance
+     */
     public Message parse(String hl7msg) {
         Message m = new Message();
         final String[] lines = StringUtils.split(hl7msg, "\r\n");
@@ -87,12 +92,14 @@ public final class HL7Parser
         return m;
     }
 
+    /** Parse HL7v2 text from a Reader */
     public Message parse(Reader r) {
         return parse(slurpReaderText(r, 2048).trim());
     }
 
+    /** Parse HL7v2 text from a Path */
     public Message parse(Path p) throws IOException {
-        final Reader r = new InputStreamReader(Files.newInputStream(p), StandardCharsets.UTF_8));
+        final Reader r = new InputStreamReader(Files.newInputStream(p), StandardCharsets.UTF_8);
         return parse(r);
     }
 

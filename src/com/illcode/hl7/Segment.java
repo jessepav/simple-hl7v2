@@ -6,27 +6,48 @@ import java.util.List;
 
 import static org.apache.commons.lang3.StringUtils.defaultString;
 
+/**
+ * A class representing the field data in a single HL7v2 segment.
+ */
 public final class Segment
 {
     String id;
     // field # -> repetition # -> FieldValue
     List<List<FieldValue>> fieldValues;
 
+    /**
+     * Construct an empty segment with the given ID.
+     */
     public Segment(String id) {
         this.id = id;
         this.fieldValues = new ArrayList<>();
     }
 
+    /**
+     * Construct a segment with the given ID and list of field values.
+     * @param id segment ID
+     * @param fieldValues a list of list of field values. The outer list index represents the field #,
+     *          and the inner list index represents the field repetitions.
+     */
     public Segment(String id, List<List<FieldValue>> fieldValues) {
         this.id = id;
         this.fieldValues = fieldValues;
     }
 
+    /**
+     * Construct an empty segment with a hint about its final size.
+     * @param id segment ID
+     * @param sizeHint hint as to the total number of fields for which we should allocate our
+     *          internal data structures
+     */
     public Segment(String id, int sizeHint) {
         this.id = id;
         this.fieldValues = new ArrayList<>(sizeHint);
     }
 
+    /**
+     * Get the ID of this segment (ex. "MSH")
+     */
     public String getId() {
         return id;
     }
@@ -94,14 +115,23 @@ public final class Segment
         }
     }
 
+    /**
+     * Equivalent to {@link #getFieldValue(int, int, int, int) getFieldValue(fieldNo, 1, 0, 0)}.
+     */
     public String getFieldValue(int fieldNo) {
         return getFieldValue(fieldNo, 1, 0, 0);
     }
 
+    /**
+     * Equivalent to {@link #getFieldValue(int, int, int, int) getFieldValue(fieldNo, 1, componentNo, 0)}.
+     */
     public String getFieldValue(int fieldNo, int componentNo) {
         return getFieldValue(fieldNo, 1, componentNo, 0);
     }
 
+    /**
+     * Equivalent to {@link #getFieldValue(int, int, int, int) getFieldValue(fieldNo, 1, componentNo, subcomponentNo)}.
+     */
     public String getFieldValue(int fieldNo, int componentNo, int subcomponentNo) {
         return getFieldValue(fieldNo, 1, componentNo, subcomponentNo);
     }
@@ -197,16 +227,25 @@ public final class Segment
         v.children = null;  // make it scalar
     }
 
-    public void setFieldValue(int fieldNo, int componentNo, int subcomponentNo, String value) {
-        setFieldValue(fieldNo, 1, componentNo, subcomponentNo, value);
+    /**
+     * Equivalent to {@link #setFieldValue(int, int, int, int, String) setFieldValue(fieldNo, 1, 0, 0, value)}.
+     */
+    public void setFieldValue(int fieldNo, String value) {
+        setFieldValue(fieldNo, 1, 0, 0, value);
     }
 
+    /**
+     * Equivalent to {@link #setFieldValue(int, int, int, int, String) setFieldValue(fieldNo, 1, componentNo, 0, value)}.
+     */
     public void setFieldValue(int fieldNo, int componentNo, String value) {
         setFieldValue(fieldNo, 1, componentNo, 0, value);
     }
 
-    public void setFieldValue(int fieldNo, String value) {
-        setFieldValue(fieldNo, 1, 0, 0, value);
+    /**
+     * Equivalent to {@link #setFieldValue(int, int, int, int, String) setFieldValue(fieldNo, 1, componentNo, subcomponentNo, value)}.
+     */
+    public void setFieldValue(int fieldNo, int componentNo, int subcomponentNo, String value) {
+        setFieldValue(fieldNo, 1, componentNo, subcomponentNo, value);
     }
 
     private void ensureCapacity(int numFields) {
@@ -264,14 +303,15 @@ public final class Segment
     }
 
     /**
-     * The "value" of a field is text that is either contained in the node itself
-     * (if it is a field with no components, or a component with no subcomponents,
-     * or is a subcomponent), or it is the list of the values of its children.
+     * A class representing the value of a field (scalar or composite). The value is text that is either
+     * contained in the node itself (if it is a field with no components, or a component with no
+     * subcomponents, or is a subcomponent), or it is the list of the values of its children.
      */
     public static class FieldValue {
-        // Only one of value or children may be non null. If both are null, then
-        // the value of this FieldValueNode is null (as opposed to the empty string).
+        /** Scalar value of this FieldValue. May be null if the FieldValue has a null-value. */
         public String value;
+
+        /** Sub-values of this FieldValue. Null if the value is scalar. */
         public List<FieldValue> children;
 
         /**
@@ -282,7 +322,7 @@ public final class Segment
 
         /**
          * Construct a scalar FieldValue (no children)
-         * @param value textual value
+         * @param value textual value, or null.
          */
         public FieldValue(String value) {
             this.value = value;

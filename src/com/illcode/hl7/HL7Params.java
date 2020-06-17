@@ -37,6 +37,9 @@ public final class HL7Params
      */
     private Map<Character,String> escapeSequenceMap;
 
+    /**
+     * Construct an HL7Params using the default separators and escape character.
+     */
     public HL7Params() {
         fieldSeparator = '|';
         componentSeparator = '^';
@@ -46,6 +49,9 @@ public final class HL7Params
         initState();
     }
 
+    /**
+     * Construct an HL7Params using the given separators and escape character.
+     */
     public HL7Params(char fieldSeparator, char componentSeparator, char subcomponentSeparator,
                      char repetitionSeparator, char escapeChar) {
         this.fieldSeparator = fieldSeparator;
@@ -56,6 +62,10 @@ public final class HL7Params
         initState();
     }
 
+    /**
+     * Construct an HL7Params using the separators and escape character found
+     * in the MSH segment text given as an argument.
+     */
     public HL7Params(String MSHText) {
         if (MSHText.length() >= 8 && MSHText.startsWith("MSH")) {
             fieldSeparator = MSHText.charAt(3);

@@ -15,22 +15,39 @@ public final class HL7Encoder
 {
     private HL7Params params;
 
+    /**
+     * Construct an HL7Encoder with default params.
+     */
     public HL7Encoder() {
         params = new HL7Params();
     }
 
+    /**
+     * Construct an HL7Encoder with the given params.
+     */
     public HL7Encoder(HL7Params params) {
         this.params = params;
     }
 
+    /** Return the parameters being used by this HL7Encoder */
     public HL7Params getParams() {
         return params;
     }
 
+    /** Set the parameters to be used by this HL7Encoder */
     public void setParams(HL7Params params) {
         this.params = params;
     }
 
+    /**
+     * Encode a Message into HL7v2 format.
+     * <p>
+     * Note that for the resulting HL7 to be valid, the segments need to be added to the
+     * Message instance in the correct order, since Message iterates through its segments
+     * in the order of insertion.
+     * @param m Message to encode
+     * @return HL7v2 text
+     */
     public String encode(Message m) {
         final Collection<List<Segment>> segments = m.segmentMap.values();
         StringBuilder sb = new StringBuilder(segments.size() * 100);
