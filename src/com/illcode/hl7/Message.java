@@ -4,6 +4,10 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 
+/**
+ * An HL7v2 message. A message is represent as a map from a segment ID to a list of {@link Segment}S
+ * (with entries in the list being the repetitions of segments in the message).
+ */
 public final class Message
 {
     // Segment ID -> repetitions of segment
@@ -25,30 +29,28 @@ public final class Message
     }
 
     /**
-     * Return a list of repetitions for a given segment ID, or null if no segment with
-     * that ID is in the message.
-     */
-    public List<Segment> getSegments(String id) {
-        return segmentMap.get(id);
-    }
-
-    /**
      * Return a collection of all the repetitions of segments in the message.
+     * <p>
+     * Note that the iteration order of the returned collection is the order in which the
+     * segment lists were added to the message, so to get a well-formed HL7 message, you'll
+     * either need to:
+     * <ol>
+     *     <li>Insert segments in the correct order (i.e. MSH first, etc.), or</li>
+     *     <li>Pick out the segments you need in the appropriate order using {@link #getSegment(String)}
+     *         or {@link #getSegment(String, int)} and encode them individually</li>
+     * </ol>
+     * </p>
      */
     public Collection<List<Segment>> segments() {
         return segmentMap.values();
     }
 
     /**
-     * Return the first segment (among any repetitions) with the given ID, or
-     * null if no such segment is in the Message.
+     * Return a list of repetitions for a given segment ID, or null if no segment with
+     * that ID is in the message.
      */
-    public Segment getSegment(String id) {
-        final List<Segment> l = segmentMap.get(id);
-        if (l != null && !l.isEmpty())
-            return l.get(0);
-        else
-            return null;
+    public List<Segment> getSegments(String id) {
+        return segmentMap.get(id);
     }
 
     /**
@@ -59,6 +61,18 @@ public final class Message
         final List<Segment> l = segmentMap.get(id);
         if (l != null && l.size() >= repetition)
             return l.get(repetition - 1);
+        else
+            return null;
+    }
+
+    /**
+     * Return the first segment (among any repetitions) with the given ID, or
+     * null if no such segment is in the Message.
+     */
+    public Segment getSegment(String id) {
+        final List<Segment> l = segmentMap.get(id);
+        if (l != null && !l.isEmpty())
+            return l.get(0);
         else
             return null;
     }

@@ -5,7 +5,7 @@ cd %~dp0..
 
 SET output_dir=build\javadoc
 
-IF "%1" == "" (
+IF NOT "%1" == "" (
     SET visibility=%1
     SET output_dir="!output_dir!-!visibility!"
     IF "!visibility!" EQU "private" SET linksrc=-linksource

@@ -7,7 +7,7 @@ import java.util.List;
 import static org.apache.commons.lang3.StringUtils.defaultString;
 
 /**
- * A class representing the field data in a single HL7v2 segment.
+ * Field data in a single HL7v2 segment.
  */
 public final class Segment
 {
@@ -303,9 +303,9 @@ public final class Segment
     }
 
     /**
-     * A class representing the value of a field (scalar or composite). The value is text that is either
-     * contained in the node itself (if it is a field with no components, or a component with no
-     * subcomponents, or is a subcomponent), or it is the list of the values of its children.
+     * The value of a field (scalar or composite). The value is either text contained in the node itself (if
+     * it is a field with no components, or a component with no subcomponents, or is a subcomponent), or it
+     * is the list of the values of its children.
      */
     public static class FieldValue {
         /** Scalar value of this FieldValue. May be null if the FieldValue has a null-value. */

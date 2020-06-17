@@ -1,7 +1,5 @@
 package com.illcode.hl7;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.Collection;
 import java.util.List;
 
@@ -50,31 +48,45 @@ public final class HL7Encoder
      */
     public String encode(Message m) {
         final Collection<List<Segment>> segments = m.segmentMap.values();
-        StringBuilder sb = new StringBuilder(segments.size() * 100);
+        final StringBuilder sb = new StringBuilder(segments.size() * 100);
         for (List<Segment> segReps : segments) {
-            for (Segment s : segReps) {
-                sb.append(s.id);
-                final int numFields = s.fieldValues.size();
-                int fieldNo = 0;
-                if (s.id.equals("MSH")) {
-                    // output MSH.1 and MSH.2 specially
-                    sb.append(params.fieldSeparator);
-                    sb.append(params.componentSeparator).append(params.repetitionSeparator)
-                      .append(params.escapeChar).append(params.subcomponentSeparator);
-                    fieldNo = 2;
-                }
-                for (; fieldNo < numFields; fieldNo++) {
-                    sb.append(params.fieldSeparator);
-                    List<FieldValue> repList = s.fieldValues.get(fieldNo);
-                    encodeHelper(sb, repList, 0);
-                }
-                sb.append('\r');
-            }
+            for (Segment s : segReps)
+                encodeHelper(sb, s);
         }
         return sb.toString();
     }
 
-    private void encodeHelper(StringBuilder sb, List<FieldValue> values, int level) {
+    /**
+     * Encode a segment into HL7v2 format
+     * @param s Segment to encode
+     * @return HL7v2 text (including the carriage-return '\r' at the end)
+     */
+    public String encode(Segment s) {
+        final StringBuilder sb = new StringBuilder(100);
+        encodeHelper(sb, s);
+        return sb.toString();
+    }
+
+    private void encodeHelper(StringBuilder sb, Segment s) {
+        sb.append(s.id);
+        final int numFields = s.fieldValues.size();
+        int fieldNo = 0;
+        if (s.id.equals("MSH")) {
+            // output MSH.1 and MSH.2 specially
+            sb.append(params.fieldSeparator);
+            sb.append(params.componentSeparator).append(params.repetitionSeparator)
+              .append(params.escapeChar).append(params.subcomponentSeparator);
+            fieldNo = 2;
+        }
+        for (; fieldNo < numFields; fieldNo++) {
+            sb.append(params.fieldSeparator);
+            List<FieldValue> repList = s.fieldValues.get(fieldNo);
+            encodeFieldValues(sb, repList, 0);
+        }
+        sb.append('\r');
+    }
+
+    private void encodeFieldValues(StringBuilder sb, List<FieldValue> values, int level) {
         if (values == null || level >= params.fieldValueSeparators.length)
             return;
         boolean first = true;
@@ -89,7 +101,7 @@ public final class HL7Encoder
                         sb.append(params.escape(v.value));
                 }
             } else {
-                encodeHelper(sb, v.children, level + 1);
+                encodeFieldValues(sb, v.children, level + 1);
             }
         }
     }
