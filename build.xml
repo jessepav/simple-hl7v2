@@ -116,6 +116,12 @@
     </dirset>
   </path>
   
+  <path id="simple-hl7v2.module.test.sourcepath">
+    <dirset dir="${module.simple-hl7v2.basedir}">
+      <include name="examples"/>
+    </dirset>
+  </path>
+  
   
   <target name="compile.module.simple-hl7v2" depends="compile.module.simple-hl7v2.production,compile.module.simple-hl7v2.tests" description="Compile module simple-hl7v2"/>
   
@@ -137,7 +143,23 @@
     </copy>
   </target>
   
-  <target name="compile.module.simple-hl7v2.tests" depends="compile.module.simple-hl7v2.production" description="compile module simple-hl7v2; test classes" unless="skip.tests"/>
+  <target name="compile.module.simple-hl7v2.tests" depends="compile.module.simple-hl7v2.production" description="compile module simple-hl7v2; test classes" unless="skip.tests">
+    <mkdir dir="${simple-hl7v2.testoutput.dir}"/>
+    <javac destdir="${simple-hl7v2.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true">
+      <compilerarg line="${compiler.args.simple-hl7v2}"/>
+      <bootclasspath refid="simple-hl7v2.module.bootclasspath"/>
+      <classpath refid="simple-hl7v2.module.classpath"/>
+      <src refid="simple-hl7v2.module.test.sourcepath"/>
+      <patternset refid="excluded.from.compilation.simple-hl7v2"/>
+    </javac>
+    
+    <copy todir="${simple-hl7v2.testoutput.dir}/com/illcode/hl7">
+      <fileset dir="${module.simple-hl7v2.basedir}/examples">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
   
   <target name="clean.module.simple-hl7v2" description="cleanup module">
     <delete dir="${simple-hl7v2.output.dir}"/>

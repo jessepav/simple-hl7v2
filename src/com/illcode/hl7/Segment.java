@@ -437,41 +437,4 @@ public final class Segment
             return new FieldValue(children);
         }
     }
-
-    public static void main(String[] args) {
-        Segment MSH = new Segment("MSH");
-        MSH.addFieldValue(1, "|");
-        MSH.addFieldValue(2, "^~\\&");
-        MSH.addFieldValue(3, "EPIC");
-        MSH.addFieldValue(5, "SMS");
-        MSH.addFieldValue(6, "SMSDT");
-        MSH.addFieldValue(7, "201501011408");
-        MSH.addFieldValue(9, FieldValue.composite("ADT", "A04"));
-        MSH.addFieldValue(10, "9000123");
-        MSH.addFieldValue(11, "D");
-        MSH.addFieldValue(12, "2.7");
-        MSH.addFieldValue(13, FieldValue.scalar(null));
-
-        Segment PID = new Segment("PID");
-        PID.addFieldValue(2, FieldValue.indexed(
-            1, "0493575",
-            4, FieldValue.composite("Big", null, "Elephant"),
-            5, "ID 1"));
-        PID.addFieldValue(3, "454721");
-        PID.addFieldValue(5, FieldValue.composite("DOE", "JOHN"));
-
-        Segment PV1 = new Segment("PV1", 3);
-        PV1.addFieldValue(2, "O");
-        PV1.addFieldValue(3, "168 ");
-        PV1.addFieldValue(3, "219");
-        PV1.addFieldValue(3, "C");
-        PV1.addFieldValue(3, "P");
-
-        Message m = new Message();
-        m.putSegment(MSH);
-        m.putSegment(PID);
-        m.putSegment(PV1);
-        HL7Encoder encoder = new HL7Encoder();
-        System.out.println(encoder.encode(m).replace("\r", "\n"));
-    }
 }

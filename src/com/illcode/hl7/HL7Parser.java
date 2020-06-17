@@ -163,33 +163,4 @@ public final class HL7Parser
         }
         return s;
     }
-
-    public static void main(String[] args) throws IOException {
-        Reader r;
-        if (args.length > 0)
-            r = new InputStreamReader(Files.newInputStream(Paths.get(args[0])), StandardCharsets.UTF_8);
-        else
-            r = new InputStreamReader(System.in);
-        String hl7 = slurpReaderText(r, 512).trim();
-        r.close();
-        HL7Parser parser = new HL7Parser(new HL7Params(hl7));
-        Message m = parser.parse(hl7);
-        if (args.length == 1) {
-            System.out.println(m.getMessageType() + "\n--------------------------");
-            System.out.println(m);
-        } else if (args.length == 2) {
-            System.out.println(m.getField(args[1]));
-        } else if (args.length == 3) {
-            m.setField(args[1], args[2]);
-            System.out.println(m);
-        }
-        /*
-        Segment PV1 = m.getSegment("PV1");
-        PV1.setFieldValue(8, 1, 1, 3, "Foo");
-        PV1.setFieldValue(8, 1, 1, 4, "bar");
-        System.err.println(m.toString());
-        HL7Encoder encoder = new HL7Encoder();
-        System.out.print(encoder.encode(m).replace("\r", "\n"));
-        */
-    }
 }
