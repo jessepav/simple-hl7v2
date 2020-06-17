@@ -1,0 +1,5 @@
+/__artifacts_temp
+/build
+/dist
+/.idea
+build.properties
