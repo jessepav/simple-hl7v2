@@ -160,7 +160,8 @@ public final class Message
     }
 
     /**
-     * Sets a field of a segment in the message.
+     * Sets a field of a segment in the message. If no segment with the specified ID
+     * exists in the message, it will be created and added.
      * @param spec spec string as described in the docs for {@link #getField}
      * @param value scalar value to assign to the field
      */
@@ -169,8 +170,10 @@ public final class Message
         if (path == null)
             return;
         Segment seg = getSegment(path.segmentId, path.segmentRep);
-        if (seg == null)
-            return;
+        if (seg == null) {
+            seg = new Segment("path.segmentId");
+            putSegment(seg);
+        }
         seg.setFieldValue(path.field, path.fieldRep, path.component, path.subcomponent, value);
     }
 
