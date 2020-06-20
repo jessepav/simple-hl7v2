@@ -25,17 +25,19 @@ public final class HL7Params
     public char[] fieldValueSeparators;
 
     /**
-     * A map from each special character to the appropriate escape sequence. For default
-     * separator and escape characters, this map's contents are:
+     * {@code escapeCharArray} and {@code escapeSequenceArray} are
+     * a pair of lists that, for each index, indicate the mapping from a special character to the
+     * appropriate escape sequence. For default separator and escape characters, these lists' contents
+     * are (taking liberties with backslash escaping):
      <pre>{@code
-    | -> \F\
-    ^ -> \S\
-    & -> \T\
-    ~ -> \R\
-    \ -> \E\
+        escapeCharArray =  ["|",   "^",   "&",   "~",   "\",   "\r",    "\n"  ]
+    escapeSequenceArray =  ["\F\", "\S\", "\T\", "\R\", "\E\", "\X0D\", "\X0A"]
      }</pre>
      */
-    private Map<Character,String> escapeSequenceMap;
+    private String[] escapeCharArray;
+
+    /** See {@link #escapeCharArray} */
+    private String[] escapeSequenceArray;
 
     /**
      * Construct an HL7Params using the default separators and escape character.
@@ -85,13 +87,14 @@ public final class HL7Params
 
     private void initState() {
         fieldValueSeparators = new char[] {repetitionSeparator, componentSeparator, subcomponentSeparator};
-
-        escapeSequenceMap = new TreeMap<>();
-        escapeSequenceMap.put(fieldSeparator, escapeChar + "F" + escapeChar);
-        escapeSequenceMap.put(componentSeparator, escapeChar + "S" + escapeChar);
-        escapeSequenceMap.put(subcomponentSeparator, escapeChar + "T" + escapeChar);
-        escapeSequenceMap.put(repetitionSeparator, escapeChar + "R" + escapeChar);
-        escapeSequenceMap.put(escapeChar, escapeChar + "E" + escapeChar);
+        escapeCharArray = new String[]
+            {Character.toString(fieldSeparator), Character.toString(componentSeparator),
+             Character.toString(subcomponentSeparator), Character.toString(repetitionSeparator),
+             Character.toString(escapeChar), "\r", "\n"};
+        escapeSequenceArray = new String[]
+            {escapeChar + "F" + escapeChar, escapeChar + "S" + escapeChar, escapeChar + "T" + escapeChar,
+             escapeChar + "R" + escapeChar, escapeChar + "E" + escapeChar,
+             escapeChar + "X0D" + escapeChar, escapeChar + "X0A" + escapeChar};
     }
 
     /**
@@ -105,7 +108,7 @@ public final class HL7Params
      * @return escaped string
      */
     public String escape(String s) {
-        return escapeHelper(s, false);
+        return StringUtils.replaceEach(s, escapeCharArray, escapeSequenceArray);
     }
 
     /**
@@ -119,19 +122,6 @@ public final class HL7Params
      * @return unescaped string
      */
     public String unescape(String s) {
-        return escapeHelper(s, true);
-    }
-
-    private String escapeHelper(String s, boolean unescape) {
-        final String[] chars = new String[escapeSequenceMap.size()];
-        final String[] replacements = new String[chars.length];
-        int idx = 0;
-        for (Map.Entry<Character,String> entry : escapeSequenceMap.entrySet()) {
-            chars[idx] = entry.getKey().toString();
-            replacements[idx] = entry.getValue();
-            idx++;
-        }
-        return unescape ? StringUtils.replaceEach(s, replacements, chars)
-                        : StringUtils.replaceEach(s, chars, replacements);
+        return StringUtils.replaceEach(s, escapeSequenceArray, escapeCharArray);
     }
 }
