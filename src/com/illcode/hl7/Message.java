@@ -171,7 +171,7 @@ public final class Message
             return;
         Segment seg = getSegment(path.segmentId, path.segmentRep);
         if (seg == null) {
-            seg = new Segment("path.segmentId");
+            seg = new Segment(path.segmentId);
             putSegment(seg);
         }
         seg.setFieldValue(path.field, path.fieldRep, path.component, path.subcomponent, value);
