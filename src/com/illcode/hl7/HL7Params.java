@@ -31,7 +31,7 @@ public final class HL7Params
      * are (taking liberties with backslash escaping):
      <pre>{@code
         escapeCharArray =  ["|",   "^",   "&",   "~",   "\",   "\r",    "\n"  ]
-    escapeSequenceArray =  ["\F\", "\S\", "\T\", "\R\", "\E\", "\X0D\", "\X0A"]
+    escapeSequenceArray =  ["\F\", "\S\", "\T\", "\R\", "\E\", "\X0D\", "\X0A\"]
      }</pre>
      */
     private String[] escapeCharArray;
