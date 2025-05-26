@@ -38,8 +38,8 @@ ant artifact.dist
 
 in the root of the source tree. 
 
-To generate Javadocs, run the [`scripts\make-javadoc.bat`](https://github.com/jessepav/simple-hl7v2/blob/master/scripts/make-javadoc.bat)
-batch file (or the equivalent `javadoc` command if you're on MacOS/Linux/etc).
+To generate Javadocs, run either `scripts\make-javadoc.bat` or
+`scripts/make-javadoc.sh`, depending on your platform.
 
 # Usage
 

@@ -5,3 +5,10 @@
 /.idea/tasks.xml
 /.idea/workspace.xml
 build.properties
+
+GPATH
+GRTAGS
+GTAGS
+gtags.files
+tags
+*.tags
