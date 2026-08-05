@@ -14,7 +14,7 @@ import {readFileSync} from 'node:fs';
 import {pathToFileURL} from 'node:url';
 
 import {HL7Params, HL7Parser, HL7Encoder, Message, Segment,
-        scalar, composite, indexed} from './simple_hl7.mjs';
+        scalar, composite, indexed} from '../src/simple_hl7.mjs';
 
 export function createSegments() {
     const MSH = new Segment("MSH");
