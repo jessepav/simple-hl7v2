@@ -1,0 +1,6 @@
+{
+  "source": {
+    "includePattern": ".+\\.(mjs|js|jsdoc|jsx)$"
+  },
+  "plugins": ["plugins/markdown"]
+}
